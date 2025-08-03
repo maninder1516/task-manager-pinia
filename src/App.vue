@@ -1,19 +1,23 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import Task from './components/Task.vue';
-import Filter from './components/Filter.vue';
-import ModalWindow from './components/modal/ModalWindow.vue';
-import AddTaskModal from './components/modal/AddTaskModal.vue';
-// import { useTasksStore } from "./stores/tasksStore.js";
-import { useTasksStore } from '@/stores/tasksStore.js';
+  import { ref, reactive, computed } from 'vue';
+  import Task from './components/Task.vue';
+  import Filter from './components/Filter.vue';
+  import ModalWindow from './components/modal/ModalWindow.vue';
+  import AddTaskModal from './components/modal/AddTaskModal.vue';
+  // import { useTasksStore } from "./stores/tasksStore.js";
+  import { useTasksStore } from '@/stores/tasksStore.js';
 
 
-// ref for Primitives : number, strings, boolean etc
-const appName = 'Task Manager with Pinia';
-// access the `store` variable anywhere in the component ✨
-const store = useTasksStore();
+  // ref for Primitives : number, strings, boolean etc
+  const appName = 'Task Manager with Pinia';
+  // access the `store` variable anywhere in the component ✨
+  const store = useTasksStore();
 
-let modalIsActive = ref(false); // This will control the modal visibility
+  store.$subscribe((mutation, state) => {
+    // persist the whole state to the local storage whenever it changes
+    localStorage.setItem('tasks', JSON.stringify(state.tasks))
+  });
+
 </script>
 
 <template>
@@ -23,7 +27,7 @@ let modalIsActive = ref(false); // This will control the modal visibility
         <h1>{{ appName }}</h1>      
       </div>
       <div class="header-side">
-        <button class="btn secondary" @click="modalIsActive = true">+ Add Task</button>  
+        <button class="btn secondary" @click="store.opneModal">+ Add Task</button>  
       </div>
     </div>
 
@@ -44,7 +48,7 @@ let modalIsActive = ref(false); // This will control the modal visibility
 
     
     <!-- Add Task Form -->    
-    <ModalWindow @closePopup="modalIsActive = false" v-if="modalIsActive">
+    <ModalWindow v-if="store.modalIsActive">
       <AddTaskModal></AddTaskModal>
     </ModalWindow>
 

@@ -1,11 +1,14 @@
 <script setup>
 import ModalCloseButton from "./ModalCloseButton.vue";
+import { useTasksStore } from '@/stores/tasksStore.js';
+const store = useTasksStore();
 </script>
 
 <template>
     <div class="modal-wrapper" aria-modal="true" role="dialog" tabindex="-1">
         <div class="inner">
-            <ModalCloseButton @click="$emit('closePopup')"></ModalCloseButton>
+            <!-- <ModalCloseButton @click="$emit('closePopup')"></ModalCloseButton> -->
+            <ModalCloseButton @click="store.closeModal"></ModalCloseButton>
             <!--Slot is used pass content from Parent to Child component -->
             <!-- Pass a template fragment to a child component, and let the child component render the fragment within its own template -->
             <slot></slot>            

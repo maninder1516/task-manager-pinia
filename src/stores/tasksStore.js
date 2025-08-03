@@ -8,53 +8,55 @@ import { ref, reactive, computed } from 'vue';
 
 export const useTasksStore = defineStore('tasks', () => {
     // reactive for array, objects, etc
-    let tasks= reactive([
-        {
-        name: "Website design",
-        description: "Define the style guide, branding and create the webdesign on Figma.",
-        completed: true,
-        id: 1
-        },
-        {
-        name: "Website development",
-        description: "Develop the portfolio website using Vue JS.",
-        completed: false,
-        id: 2
-        },
-        {
-        name: "Hosting and infrastructure",
-        description: "Define hosting, domain and infrastructure for the portfolio website.",
-        completed: false,
-        id: 3
-        },
-        {
-        name: "Composition API",
-        description: "Learn how to use the composition API and how it compares to the options API.",
-        completed: true,
-        id: 4
-        },
-        {
-        name: "Pinia",
-        description: "Learn how to setup a store using Pinia.",
-        completed: true,
-        id: 5
-        },
-        {
-        name: "Groceries",
-        description: "Buy rice, apples and potatos.",
-        completed: false,
-        id: 6
-        },
-        {
-        name: "Bank account",
-        description: "Open a bank account for my freelance business.",
-        completed: false,
-        id: 7
-        }
-    ]);
+    const tasks = reactive(JSON.parse(localStorage.getItem('tasks')) || [] );
+
+    // let tasks= reactive([
+    //     {
+    //     name: "Website design",
+    //     description: "Define the style guide, branding and create the webdesign on Figma.",
+    //     completed: true,
+    //     id: 1
+    //     },
+    //     {
+    //     name: "Website development",
+    //     description: "Develop the portfolio website using Vue JS.",
+    //     completed: false,
+    //     id: 2
+    //     },
+    //     {
+    //     name: "Hosting and infrastructure",
+    //     description: "Define hosting, domain and infrastructure for the portfolio website.",
+    //     completed: false,
+    //     id: 3
+    //     },
+    //     {
+    //     name: "Composition API",
+    //     description: "Learn how to use the composition API and how it compares to the options API.",
+    //     completed: true,
+    //     id: 4
+    //     },
+    //     {
+    //     name: "Pinia",
+    //     description: "Learn how to setup a store using Pinia.",
+    //     completed: true,
+    //     id: 5
+    //     },
+    //     {
+    //     name: "Groceries",
+    //     description: "Buy rice, apples and potatos.",
+    //     completed: false,
+    //     id: 6
+    //     },
+    //     {
+    //     name: "Bank account",
+    //     description: "Open a bank account for my freelance business.",
+    //     completed: false,
+    //     id: 7
+    //     }
+    // ]);
 
     let filterBy = ref(''); // This will hold the filter value
-
+    let modalIsActive = ref(false); // This will control the modal visibility
 
     function setFilter(value) {
         filterBy.value = value;
@@ -76,7 +78,7 @@ export const useTasksStore = defineStore('tasks', () => {
         if(newTask.name && newTask.description) {
             // Create a new task object
             const task = {
-                id: Math.max(...tasks.map(task => task.id)) + 1, // Generate a new ID based on existing tasks
+                id: tasks.length ? Math.max(...tasks.map(task => task.id)) + 1 : 1, // Generate a new ID based on existing tasks
                 name: newTask.name,
                 description: newTask.description,
                 completed: newTask.completed
@@ -84,7 +86,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
             // Push the new task to the tasks array
             tasks.push(task);
-            
+            closeModal(); // Close the modal after adding the task
             // Reset the newTask object
             newTask.name = '';
             newTask.description = '';
@@ -101,6 +103,13 @@ export const useTasksStore = defineStore('tasks', () => {
         });
     }
 
+    function opneModal(){
+        modalIsActive.value = true;
+    }
+    function closeModal(){
+        modalIsActive.value = false;
+    }
+
     
-    return { tasks, filterBy, setFilter, filteredTasks, addTask, toggleCompleted };
+    return { tasks, filterBy, setFilter, filteredTasks, addTask, toggleCompleted, modalIsActive, opneModal, closeModal };
 });

@@ -1,7 +1,7 @@
 <script setup>    
-    import { useTasksStore } from '@/stores/tasksStore.js';
-    const store = useTasksStore();
-    const newTask = { completed: false, name: '', description: '' };
+import { useTasksStore } from '@/stores/tasksStore.js';
+const store = useTasksStore();
+const newTask = { completed: false, name: '', description: '' };
 </script>
 
 <template>
