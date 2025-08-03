@@ -1,5 +1,8 @@
 <script setup>
- const props = defineProps(['filterBy']);
+  import { useTasksStore } from '@/stores/tasksStore.js';
+  // access the `store` variable anywhere in the component ✨
+  const store = useTasksStore();
+ 
 </script>
 
 <template>
@@ -7,9 +10,10 @@
       <div>
           <p>Filters</p>
           <div class="badges">
-            <span @click="$emit('setFilter', 'todo')" class="badge" :class="{ selected: filterBy === 'todo' }">To-Do</span>
-            <span @click="$emit('setFilter', 'done')" class="badge" :class="{ selected: filterBy === 'done' }">Done</span>
-            <span @click="$emit('setFilter', '')" class="clear" v-if="filterBy">x clear</span>
+            <!-- <span @click="$emit('setFilter', 'todo')" class="badge" :class="{ selected: filterBy === 'todo' }">To-Do</span> -->
+            <span @click="store.setFilter('todo')"class="badge" :class="{ selected: store.filterBy === 'todo' }">To-Do</span>
+            <span @click="store.setFilter('done')" class="badge" :class="{ selected: store.filterBy === 'done' }">Done</span>
+            <span @click="store.setFilter('')" class="clear" v-if="store.filterBy">x clear</span>
           </div>
       </div>
     </div>
