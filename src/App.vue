@@ -58,11 +58,12 @@ function addTask(){
   if(newTask.name && newTask.description) {
     // Create a new task object
     const task = {
+      id: Math.max(...tasks.map(task => task.id)) + 1, // Generate a new ID based on existing tasks
       name: newTask.name,
       description: newTask.description,
       completed: newTask.completed
     };
-    
+
     // Push the new task to the tasks array
     tasks.push(task);
     
@@ -72,6 +73,14 @@ function addTask(){
   } else {
     alert('Please enter the title and description for the task.');
   }
+}
+
+function toggleCompleted(taskId) {
+  tasks.forEach(task => {
+    if (task.id === taskId) {
+      task.completed = !task.completed; // Toggle the completed status
+    }
+  });
 }
 
 </script>
@@ -98,7 +107,7 @@ function addTask(){
      
     <!-- Tasks -->
     <div class="tasks">
-      <Task v-for="(task, index) in tasks" :key="index" :task="task"></Task>      
+      <Task @toggleCompleted="toggleCompleted" v-for="(task, index) in tasks" :key="index" :task="task"></Task>      
     </div>
 
     <div class="add-task">
